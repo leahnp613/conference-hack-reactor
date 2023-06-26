@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 
 
+# NEED TO ADD PICTURE URL TO THESE MODELS
+
 class State(models.Model):
     """
     The State model represents a US state with its name

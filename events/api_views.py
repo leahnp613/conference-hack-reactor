@@ -3,8 +3,11 @@ from urllib import response
 from django.http import JsonResponse
 import json
 from .acls import get_photo
+from django.views.decorators.http import require_http_methods
+from .models import Conference, Location, State
 
-from .models import Conference, Location
+
+# NEED TO ADD ENCODER FROM LEARN
 
 
 def api_list_conferences(request):
@@ -12,8 +15,8 @@ def api_list_conferences(request):
         conferences = Conference.objects.get(id=id)
         return JsonResponse(
         {"conferences": conferences},
-        encoder=ConferenceListEncoder,
-    ))
+        # encoder=ConferenceListEncoder,
+    )
     else:
         content = json.loads(request.body)
 
@@ -30,7 +33,7 @@ def api_list_conferences(request):
     conference = Conference.objects.create(**content)
     return JsonResponse(
         conference,
-        encoder=ConferenceDetailEncoder,
+        # encoder=ConferenceDetailEncoder,
         safe=False,
     )
 
@@ -40,7 +43,7 @@ def api_show_location(request, id):
         location = Location.objects.get(id=id)
         return JsonResponse(
         location,
-        encoder=LocationDetailEncoder,
+        # encoder=LocationDetailEncoder,
         safe=False,)
     else:
     # copied from create
@@ -66,9 +69,9 @@ def api_show_location(request, id):
         encoder=LocationDetailEncoder,
         safe=False,
     )
-    elif request.method == "DELETE":
-        count, _ = Location.objects.filter(id=id).delete()
-        return JsonResponse({"deleted": count > 0})
+    # elif request.method == "DELETE":
+    #     count, _ = Location.objects.filter(id=id).delete()
+    #     return JsonResponse({"deleted": count > 0})
 
 
 @require_http_methods(["GET", "POST"])
@@ -77,17 +80,17 @@ def api_list_locations(request):
         locations = Location.objects.get(id=id)
         return JsonResponse(
             {"locations": locations},
-        encoder=LocationListEncoder,
+        # encoder=LocationListEncoder,
     )
     else:
         content = json.loads(request.body)
         state = State.objects.get(abbreviation = content ["state"])
         content["state"] = state
-    except State.DoesNotExist:
-        return JsonResponse(
-            {"message": "Invalid state abbreviation"},
-            status = 400,
-        )
+    # except State.DoesNotExist:
+    #     return JsonResponse(
+    #         {"message": "Invalid state abbreviation"},
+    #         status = 400,
+    #     )
         # Get photo
         photo = get_photo(content["city"], content["state"] )
         content.update(photo)
@@ -95,7 +98,7 @@ def api_list_locations(request):
         location = Location.objects.create(**content)
     return JsonResponse(
         location,
-        encoder=LocationDetailEncoder,
+        # encoder=LocationDetailEncoder,
         safe=False,
     )
 
@@ -111,4 +114,4 @@ def api_show_location(request, id):
         "state":location.state
     }
 )
-return JsonResponse({"location", response})
+   

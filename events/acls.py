@@ -1,6 +1,7 @@
 from .keys import PEXELS_API_KEY, OPEN_WEATHER_API_KEY
 from django.http import JsonResponse
 import requests
+import json
 
 
 def get_photo(city,state):
@@ -13,12 +14,13 @@ def get_photo(city,state):
 
     response = requests.get(url, params = params, headers = headers)
     content = json.loads(response.content)
+    print(content)
+
     try:
         return {"picture_url": content["photos"] [0] ["src"]["original"]}
     except (KeyError, IndexError):
         return{"picture_url": None}
 
-print(content)
     
 
 

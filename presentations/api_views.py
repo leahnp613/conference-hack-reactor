@@ -53,4 +53,3 @@ def api_show_presentation(request, id):
         }
     }
 )
-return JsonResponse({"presentation", response})
