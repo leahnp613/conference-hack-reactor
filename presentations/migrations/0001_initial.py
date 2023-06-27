@@ -9,36 +9,69 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('events', '0001_initial'),
+        ("events", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Status',
+            name="Status",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=10)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=10)),
             ],
             options={
-                'verbose_name_plural': 'statuses',
-                'ordering': ('id',),
+                "verbose_name_plural": "statuses",
+                "ordering": ("id",),
             },
         ),
         migrations.CreateModel(
-            name='Presentation',
+            name="Presentation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('presenter_name', models.CharField(max_length=150)),
-                ('company_name', models.CharField(blank=True, max_length=150, null=True)),
-                ('presenter_email', models.EmailField(max_length=254)),
-                ('title', models.CharField(max_length=200)),
-                ('synopsis', models.TextField()),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('conference', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='presentations', to='events.conference')),
-                ('status', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='presentations', to='presentations.status')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("presenter_name", models.CharField(max_length=150)),
+                (
+                    "company_name",
+                    models.CharField(blank=True, max_length=150, null=True),
+                ),
+                ("presenter_email", models.EmailField(max_length=254)),
+                ("title", models.CharField(max_length=200)),
+                ("synopsis", models.TextField()),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                (
+                    "conference",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="presentations",
+                        to="events.conference",
+                    ),
+                ),
+                (
+                    "status",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="presentations",
+                        to="presentations.status",
+                    ),
+                ),
             ],
             options={
-                'ordering': ('title',),
+                "ordering": ("title",),
             },
         ),
     ]

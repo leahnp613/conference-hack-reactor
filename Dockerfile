@@ -10,7 +10,7 @@ WORKDIR /app
 # Copy all the code from the local directory into the image
 COPY accounts accounts
 COPY attendees attendees
-# COPY common common
+COPY common common
 COPY conference_go conference_go
 COPY events events
 COPY presentations presentations
