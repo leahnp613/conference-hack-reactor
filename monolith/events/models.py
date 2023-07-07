@@ -14,6 +14,7 @@ class State(models.Model):
     direct URL to view it.
     """
 
+    id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=20)
     abbreviation = models.CharField(max_length=2)
 
@@ -76,7 +77,7 @@ class Conference(models.Model):
     )
 
     def get_api_url(self):
-        return reverse("api_show_conference", kwargs={"id": self.id})
+        return reverse("api_show_conference", kwargs={"pk": self.pk})
 
     def __str__(self):
         return self.name
