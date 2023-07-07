@@ -1,21 +1,35 @@
 version: "3.9"
 
 services:
-  web:
-    build: .
-    command: python /code/manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
+  monolith:
+    build:
+      context: ./monolith
+      dockerfile: ./Dockerfile.dev
     ports:
-      - 8000:8000
-    depends_on:
-      - db
-  db:
-    image: postgres:13-bullseye
+      - "8000:8000"
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
-
-volumes:
-  postgres_data:
+      - ./monolith:/app
+    depends_on:
+      - rabbitmq
+  attendees_microservice:
+    build:
+      context: ./attendees_microservice
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./attendees_microservice:/app
+  presentation_workflow:
+    build:
+      context: ./presentation_workflow
+      dockerfile: ./Dockerfile.dev
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./presentation_workflow:/app
+  rabbitmq:
+    image: rabbitmq:3
+  mail:
+    image: rnwood/smtp4dev
+    ports:
+      - "3000:80"

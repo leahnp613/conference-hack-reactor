@@ -10,6 +10,7 @@ class Status(models.Model):
     Status is a Value Object and, therefore, does not have a
     direct URL to view it.
     """
+    id = models.PositiveSmallIntegerField(primary_key=True)
 
     name = models.CharField(max_length=10)
 
@@ -26,6 +27,13 @@ class Presentation(models.Model):
     The Presentation model represents a presentation that a person
     wants to give at the conference.
     """
+
+    @classmethod
+    def create(cls, **kwargs):
+        kwargs["status"] = Status.objects.get(name="SUBMITTED")
+        presentation = cls(**kwargs)
+        presentation.save()
+        return presentation
 
     presenter_name = models.CharField(max_length=150)
     company_name = models.CharField(max_length=150, null=True, blank=True)
@@ -47,23 +55,21 @@ class Presentation(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def approve(self):
+        status = Status.objects.get(name="APPROVED")
+        self.status = status
+        self.save()
+
+    def reject(self):
+        status = Status.objects.get(name="REJECTED")
+        self.status = status
+        self.save()
+
     def get_api_url(self):
-        return reverse("api_show_presentation", kwargs={"id": self.id})
+        return reverse("api_show_presentation", kwargs={"pk": self.pk})
 
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ("title",)  # Default ordering for presentation
-
-
-def approve(self):
-    status = Status.objects.get(name="APPROVED")
-    self.status = status
-    self.save()
-
-
-def reject(self):
-    status = Status.objects.get(name="REJECTED")
-    self.status = status
-    self.save()
