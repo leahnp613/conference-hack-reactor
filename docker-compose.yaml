@@ -11,6 +11,15 @@ services:
       - ./monolith:/app
     depends_on:
       - rabbitmq
+  
+  attendees_account_info:
+    build:
+      context: ./attendees_microservice
+      dockerfile: ./Dockerfile.account_info.dev
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./attendees_microservice:/app
   attendees_microservice:
     build:
       context: ./attendees_microservice
